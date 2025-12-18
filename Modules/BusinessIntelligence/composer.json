@@ -1,0 +1,40 @@
+{
+    "name": "ultimatepos/businessintelligence",
+    "description": "AI-Powered Business Intelligence Dashboard Module for Ultimate POS - Advanced analytics, automated insights, and predictive recommendations",
+    "version": "1.0.0",
+    "type": "ultimatepos-module",
+    "license": "Commercial",
+    "authors": [
+        {
+            "name": "Ultimate POS Team",
+            "email": "support@ultimatepos.com"
+        }
+    ],
+    "keywords": [
+        "ultimatepos",
+        "business intelligence",
+        "ai",
+        "analytics",
+        "dashboard",
+        "insights",
+        "pos"
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\BusinessIntelligence\\Providers\\BusinessIntelligenceServiceProvider"
+            ],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\BusinessIntelligence\\": ""
+        }
+    }
+}
+

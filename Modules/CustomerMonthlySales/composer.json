@@ -1,0 +1,26 @@
+{
+    "name": "nwidart/customermonthlysales",
+    "description": "Customer Monthly Sales Report Module",
+    "authors": [
+        {
+            "name": "Customer Monthly Sales",
+            "email": "info@example.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\CustomerMonthlySales\\Providers\\CustomerMonthlySalesServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\CustomerMonthlySales\\": ""
+        }
+    }
+}
+

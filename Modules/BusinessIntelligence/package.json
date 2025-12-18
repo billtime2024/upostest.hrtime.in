@@ -1,0 +1,21 @@
+{
+    "name": "businessintelligence",
+    "version": "1.0.0",
+    "description": "AI-Powered Business Intelligence Dashboard Module",
+    "main": "Resources/assets/js/app.js",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "keywords": [
+        "business intelligence",
+        "ai",
+        "analytics"
+    ],
+    "license": "Commercial",
+    "dependencies": {
+        "chart.js": "^4.4.0",
+        "apexcharts": "^3.44.0"
+    }
+}
+

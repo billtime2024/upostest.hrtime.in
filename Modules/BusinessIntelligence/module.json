@@ -1,0 +1,17 @@
+{
+    "name": "BusinessIntelligence",
+    "alias": "businessintelligence",
+    "description": "AI-Powered Business Intelligence Dashboard with advanced analytics, automated insights, and predictive recommendations for comprehensive business performance monitoring",
+    "keywords": ["business intelligence", "ai analytics", "dashboard", "insights", "predictions", "kpi", "reports", "data analysis"],
+    "author": "Ultimate POS Team",
+    "active": 1,
+    "order": 26,
+    "priority": 1,
+    "providers": [
+        "Modules\\BusinessIntelligence\\Providers\\BusinessIntelligenceServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
+

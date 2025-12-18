@@ -1,0 +1,6 @@
+contact_type,prefix,first_name,middle_name,last_name,supplier_business_name,contact_id,tax_number,opening_balance,pay_term_number,pay_term_type,credit_limit,email,mobile,alternate_number,landline,city,state,country,address_line_1,address_line_2,zip_code,dob,custom_field1,custom_field2,custom_field3,custom_field4,reward_points
+1,,John,,Doe,,,,0,,days,0,,919876543210,,,,,,,,,,,,,100
+2,,Jane,,Smith,,,,0,,days,0,,919876543211,,,,,,,,,,,,,50
+3,,Alex,,Brown,,,,0,,days,0,,919876543212,,,,,,,,,,,,,75
+1,,Invalid,,Test,,,,0,,days,0,,919876543213,,,,,,,,,,,,,-10
+1,,Invalid2,,Test,,,,0,,days,0,,919876543214,,,,,,,,,,,,,abc

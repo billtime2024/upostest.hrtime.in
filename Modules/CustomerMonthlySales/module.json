@@ -1,0 +1,15 @@
+{
+    "name": "CustomerMonthlySales",
+    "alias": "customermonthlysales",
+    "description": "Customer Monthly Sales Report Module<br/><small style=\"color: #777;\">Developed by Posifyme.com</small>",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\CustomerMonthlySales\\Providers\\CustomerMonthlySalesServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
+

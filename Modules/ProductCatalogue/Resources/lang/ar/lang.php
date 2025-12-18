@@ -1,0 +1,22 @@
+<?php
+return [
+    'productcatalogue_module' => 'وحدة كتالوج المنتجات',
+    'catalogue_qr' => 'رمز الاستجابة السريعة للكتالوج',
+    'generate_qr' => 'إنشاء رمز الاستجابة السريعة',
+    'select_business_location' => 'اختر موقع العمل',
+    'download_image' => 'تحميل الصورة',
+    'qr_code_color' => 'لون رمز الاستجابة السريعة',
+    'catalogue_instruction_1' => 'اختر موقع العمل ولون رمز الاستجابة السريعة',
+    'catalogue_instruction_2' => 'اختر العنوان والعنوان الفرعي وما إذا كنت تريد إظهار الشعار أم لا',
+    'catalogue_instruction_3' => 'انقر لإنشاء رمز الاستجابة السريعة',
+    'product_catalogue' => 'كتالوج المنتجات',
+    'show_business_logo_on_qrcode' => 'إظهار شعار العمل على رمز الاستجابة السريعة',
+    'title' => 'العنوان',
+    'subtitle' => 'العنوان الفرعي',
+    'setting' => 'الإعدادات',
+    'outofstock_products' => 'المنتجات غير المتوفرة',
+    'show' => 'إظهار',
+    'hide' => 'إخفاء',
+    'save' => 'حفظ',
+    'out_of_stock' => 'غير متوفر',
+];

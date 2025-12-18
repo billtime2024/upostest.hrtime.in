@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+}
+@layer components {
+}
+@layer utilities {
+}
+
+/* custom css */
+
+.new-notification {
+    text-align: center;
+    background-color: #a90000;
+    color: #ffffff;
+    margin: 0;
+    padding: 1rem;
+}
+
+@media print {
+    .new-notification {
+        display: none !important;
+    }
+}
+
+.new-notification > div {
+     animation: new_notification 40s ease-out 0s infinite;
+     /*transition: new_notification 200s;*/
+}
+
+@keyframes new_notification {
+    0%{
+        transform: translateX(99vw);
+    }
+    100%{
+         transform: translateX(-85vw);
+    }
+}
