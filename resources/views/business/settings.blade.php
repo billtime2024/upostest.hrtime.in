@@ -34,7 +34,6 @@
                     <a href="#" class="list-group-item text-center tw-font-bold tw-text-sm md:tw-text-base">@lang('lang_v1.prefixes')</a>
                     <a href="#" class="list-group-item text-center tw-font-bold tw-text-sm md:tw-text-base">@lang('lang_v1.email_settings')</a>
                     <a href="#" class="list-group-item text-center tw-font-bold tw-text-sm md:tw-text-base">@lang('lang_v1.sms_settings')</a>
-                    <a href="#" class="list-group-item text-center tw-font-bold tw-text-sm md:tw-text-base">@lang('lang_v1.whatsapp_settings')</a>
                     <a href="#" class="list-group-item text-center tw-font-bold tw-text-sm md:tw-text-base">@lang('lang_v1.reward_point_settings')</a>
                     <a href="#" class="list-group-item text-center tw-font-bold tw-text-sm md:tw-text-base">@lang('lang_v1.modules')</a>
                     <a href="#" class="list-group-item text-center tw-font-bold tw-text-sm md:tw-text-base">@lang('lang_v1.custom_labels')</a>
@@ -77,9 +76,6 @@
                 @include('business.partials.settings_sms')
                 <!-- tab 10 end -->
                 <!-- tab 11 start -->
-                @include('business.partials.settings_whatsapp')
-                <!-- tab 11 end -->
-                <!-- tab 12 start -->
                 @include('business.partials.settings_reward_point')
                 <!-- tab 11 end -->
                 <!-- tab 12 start -->
@@ -192,43 +188,6 @@
                 method: 'post',
                 data: data,
                 url: "{{ action([\App\Http\Controllers\BusinessController::class, 'testSmsConfiguration']) }}",
-                dataType: 'json',
-                success: function(result) {
-                    if (result.success == true) {
-                        swal({
-                            text: result.msg,
-                            icon: 'success'
-                        });
-                    } else {
-                        swal({
-                            text: result.msg,
-                            icon: 'error'
-                        });
-                    }
-                },
-            });
-
-        });
-
-        $('#test_whatsapp_btn').click( function() {
-            var test_number = $('#test_whatsapp_number').val();
-            if (test_number.trim() == '') {
-                toastr.error('{{__("lang_v1.test_number_is_required")}}');
-                $('#test_whatsapp_number').focus();
-
-                return false;
-            }
-
-            var data = {
-                instance_id: $('#whatsapp_instance_id').val(),
-                access_token: $('#whatsapp_access_token').val(),
-                test_number: test_number
-            };
-
-            $.ajax({
-                method: 'post',
-                data: data,
-                url: "{{ action([\App\Http\Controllers\BusinessController::class, 'testWhatsappConfiguration']) }}",
                 dataType: 'json',
                 success: function(result) {
                     if (result.success == true) {

@@ -37,7 +37,6 @@ class Business extends Model
         'enabled_modules' => 'array',
         'email_settings' => 'array',
         'sms_settings' => 'array',
-        'whatsapp_settings' => 'array',
         'common_settings' => 'array',
         'weighing_scale_setting' => 'array',
     ];

@@ -330,8 +330,6 @@ class BusinessController extends Controller
 
         $sms_settings = empty($business->sms_settings) ? $this->businessUtil->defaultSmsSettings() : $business->sms_settings;
 
-        $whatsapp_settings = empty($business->whatsapp_settings) ? [] : $business->whatsapp_settings;
-
         $modules = $this->moduleUtil->availableModules();
 
         $theme_colors = $this->theme_colors;
@@ -348,7 +346,7 @@ class BusinessController extends Controller
 
         $payment_types = $this->moduleUtil->payment_types(null, false, $business_id);
 
-        return view('business.settings', compact('business', 'currencies', 'tax_rates', 'timezone_list', 'months', 'accounting_methods', 'commission_agent_dropdown', 'units_dropdown', 'date_formats', 'shortcuts', 'pos_settings', 'modules', 'theme_colors', 'email_settings', 'sms_settings', 'whatsapp_settings', 'mail_drivers', 'allow_superadmin_email_settings', 'custom_labels', 'common_settings', 'weighing_scale_setting', 'payment_types'));
+        return view('business.settings', compact('business', 'currencies', 'tax_rates', 'timezone_list', 'months', 'accounting_methods', 'commission_agent_dropdown', 'units_dropdown', 'date_formats', 'shortcuts', 'pos_settings', 'modules', 'theme_colors', 'email_settings', 'sms_settings', 'mail_drivers', 'allow_superadmin_email_settings', 'custom_labels', 'common_settings', 'weighing_scale_setting', 'payment_types'));
     }
 
     /**
@@ -372,7 +370,7 @@ class BusinessController extends Controller
             $business_details = $request->only(['name', 'start_date', 'currency_id', 'tax_label_1', 'tax_number_1', 'tax_label_2', 'tax_number_2', 'default_profit_percent', 'default_sales_tax', 'default_sales_discount', 'sell_price_tax', 'sku_prefix', 'time_zone', 'fy_start_month', 'accounting_method', 'transaction_edit_days', 'sales_cmsn_agnt', 'item_addition_method', 'currency_symbol_placement', 'on_product_expiry',
                 'stop_selling_before', 'default_unit', 'expiry_type', 'date_format',
                 'time_format', 'ref_no_prefixes', 'theme_color', 'email_settings',
-                'sms_settings', 'whatsapp_settings', 'rp_name', 'amount_for_unit_rp',
+                'sms_settings', 'rp_name', 'amount_for_unit_rp',
                 'min_order_total_for_rp', 'max_rp_per_order',
                 'redeem_amount_per_unit_rp', 'min_order_total_for_redeem',
                 'min_redeem_point', 'max_redeem_point', 'rp_expiry_period',
@@ -438,21 +436,6 @@ class BusinessController extends Controller
 
             $business_id = request()->session()->get('user.business_id');
             $business = Business::where('id', $business_id)->first();
-
-            // Handle WhatsApp settings - preserve original values if masked
-            if (isset($business_details['whatsapp_settings'])) {
-                $original_whatsapp_settings = !empty($business->whatsapp_settings) ? $business->whatsapp_settings : [];
-
-                if (isset($business_details['whatsapp_settings']['instance_id']) &&
-                    $business_details['whatsapp_settings']['instance_id'] === '••••••••••••••••') {
-                    $business_details['whatsapp_settings']['instance_id'] = $original_whatsapp_settings['instance_id'] ?? null;
-                }
-
-                if (isset($business_details['whatsapp_settings']['access_token']) &&
-                    $business_details['whatsapp_settings']['access_token'] === '••••••••••••••••') {
-                    $business_details['whatsapp_settings']['access_token'] = $original_whatsapp_settings['access_token'] ?? null;
-                }
-            }
 
             //Update business settings
             if (! empty($business_details['logo'])) {
@@ -626,70 +609,6 @@ class BusinessController extends Controller
             $output = [
                 'success' => 0,
                 'msg' => $e->getMessage(),
-            ];
-        }
-
-        return $output;
-    }
-
-    /**
-     * Handles the testing of whatsapp configuration
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function testWhatsappConfiguration(Request $request)
-    {
-        try {
-            $input = $request->input();
-
-            if (empty($input['instance_id']) || empty($input['access_token'])) {
-                $output = [
-                    'success' => 0,
-                    'msg' => 'Please enter Instance ID and Access Token',
-                ];
-            } elseif (empty($input['test_number'])) {
-                $output = [
-                    'success' => 0,
-                    'msg' => __('lang_v1.test_number_is_required'),
-                ];
-            } else {
-                $data = [
-                    'whatsapp_settings' => [
-                        'instance_id' => $input['instance_id'],
-                        'access_token' => $input['access_token']
-                    ],
-                    'number' => $input['test_number'],
-                    'message' => 'This is a test WhatsApp message from your business system',
-                    'type' => 'text'
-                ];
-
-                $response = $this->businessUtil->sendWhatsapp($data);
-
-                if ($response && $response->getStatusCode() == 200) {
-                    $responseBody = json_decode($response->getBody(), true);
-                    if (isset($responseBody['status']) && $responseBody['status'] == 'success') {
-                        $output = [
-                            'success' => 1,
-                            'msg' => 'WhatsApp message sent successfully!',
-                        ];
-                    } else {
-                        $output = [
-                            'success' => 0,
-                            'msg' => 'API Error: ' . ($responseBody['message'] ?? 'Unknown error'),
-                        ];
-                    }
-                } else {
-                    $output = [
-                        'success' => 0,
-                        'msg' => 'Failed to send WhatsApp message. Please check your credentials.',
-                    ];
-                }
-            }
-        } catch (\Exception $e) {
-            \Log::emergency('WhatsApp Test Error: ' . $e->getMessage());
-            $output = [
-                'success' => 0,
-                'msg' => 'Error: ' . $e->getMessage(),
             ];
         }
 
