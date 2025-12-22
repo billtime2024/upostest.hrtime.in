@@ -38,7 +38,7 @@
 						<span class="input-group-addon">
 							<i class="fa fa-user"></i>
 						</span>
-						{!! Form::select('contact_id', $suppliers, $purchase->contact_id ?? null, ['class' => 'form-control', 'placeholder' => __('messages.please_select'), 'required', 'id' => 'supplier_id']); !!}
+						{!! Form::select('contact_id', $suppliers, ($purchase ? $purchase->contact_id : null), ['class' => 'form-control', 'placeholder' => __('messages.please_select'), 'required', 'id' => 'supplier_id']); !!}
 						<span class="input-group-btn">
 							<button type="button" class="btn btn-default bg-white btn-flat add_new_supplier" data-name=""><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
 						</span>
@@ -52,7 +52,7 @@
 			<div class="@if(!empty($default_purchase_status)) col-sm-4 @else col-sm-3 @endif">
 				<div class="form-group">
 					{!! Form::label('ref_no', __('purchase.ref_no').':') !!}
-					{!! Form::text('ref_no', $purchase->ref_no ?? null, ['class' => 'form-control']); !!}
+					{!! Form::text('ref_no', ($purchase ? $purchase->ref_no : null), ['class' => 'form-control']); !!}
 				</div>
 			</div>
 			<div class="@if(!empty($default_purchase_status)) col-sm-4 @else col-sm-3 @endif">
@@ -62,7 +62,7 @@
 						<span class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 						</span>
-						{!! Form::text('transaction_date', @format_datetime($purchase->transaction_date ?? 'now'), ['class' => 'form-control', 'readonly', 'required']); !!}
+						{!! Form::text('transaction_date', @format_datetime(($purchase ? $purchase->transaction_date : 'now')), ['class' => 'form-control', 'readonly', 'required']); !!}
 					</div>
 				</div>
 			</div>
@@ -74,7 +74,7 @@
 						<span class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 						</span>
-						{!! Form::text('delivery_date', $purchase->delivery_date ? @format_datetime($purchase->delivery_date) : null, ['class' => 'form-control']); !!}
+						{!! Form::text('delivery_date', ($purchase && $purchase->delivery_date) ? @format_datetime($purchase->delivery_date) : null, ['class' => 'form-control']); !!}
 					</div>
 				</div>
 			</div>
@@ -106,7 +106,7 @@
 						<span class="input-group-addon">
 							<i class="fa fa-info"></i>
 						</span>
-						{!! Form::number('exchange_rate', $purchase->exchange_rate ?? $currency_details->p_exchange_rate, ['class' => 'form-control', 'required', 'step' => 0.001]); !!}
+						{!! Form::number('exchange_rate', ($purchase ? $purchase->exchange_rate : $currency_details->p_exchange_rate), ['class' => 'form-control', 'required', 'step' => 0.001]); !!}
 					</div>
 					<span class="help-block text-danger">
 						@lang('purchase.diff_purchase_currency_help', ['currency' => $currency_details->name])
@@ -119,12 +119,12 @@
 			           <div class="multi-input">
 			             {!! Form::label('pay_term_number', __('contact.pay_term') . ':') !!} @show_tooltip(__('tooltip.pay_term'))
 			             <br/>
-			             {!! Form::number('pay_term_number', $purchase->pay_term_number ?? null, ['class' => 'form-control width-40 pull-left', 'placeholder' => __('contact.pay_term')]); !!}
+			             {!! Form::number('pay_term_number', ($purchase ? $purchase->pay_term_number : null), ['class' => 'form-control width-40 pull-left', 'placeholder' => __('contact.pay_term')]); !!}
 
 			             {!! Form::select('pay_term_type',
 			             	['months' => __('lang_v1.months'),
 			             		'days' => __('lang_v1.days')],
-			             		$purchase->pay_term_type ?? null,
+			             		($purchase ? $purchase->pay_term_type : null),
 			             	['class' => 'form-control width-60 pull-left','placeholder' => __('messages.please_select'), 'id' => 'pay_term_type']); !!}
 			           </div>
 			       </div>
@@ -251,13 +251,13 @@
 		<div class="col-md-4">
 			<div class="form-group">
 	            {!! Form::label('shipping_details', __('sale.shipping_details')) !!}
-	            {!! Form::textarea('shipping_details',$purchase->shipping_details ?? null, ['class' => 'form-control','placeholder' => __('sale.shipping_details') ,'rows' => '3', 'cols'=>'30']); !!}
+	            {!! Form::textarea('shipping_details',($purchase ? $purchase->shipping_details : null), ['class' => 'form-control','placeholder' => __('sale.shipping_details') ,'rows' => '3', 'cols'=>'30']); !!}
 	        </div>
 		</div>
 		<div class="col-md-4">
 			<div class="form-group">
 	            {!! Form::label('shipping_address', __('lang_v1.shipping_address')) !!}
-	            {!! Form::textarea('shipping_address',$purchase->shipping_address ?? null, ['class' => 'form-control','placeholder' => __('lang_v1.shipping_address') ,'rows' => '3', 'cols'=>'30']); !!}
+	            {!! Form::textarea('shipping_address',($purchase ? $purchase->shipping_address : null), ['class' => 'form-control','placeholder' => __('lang_v1.shipping_address') ,'rows' => '3', 'cols'=>'30']); !!}
 	        </div>
 		</div>
 		<div class="col-md-4">
@@ -267,7 +267,7 @@
 				<span class="input-group-addon">
 				<i class="fa fa-info"></i>
 				</span>
-				{!!Form::text('shipping_charges',$purchase->shipping_charges ? @num_format($purchase->shipping_charges) : @num_format(0.00),['class'=>'form-control input_number','placeholder'=> __('sale.shipping_charges')]);!!}
+				{!!Form::text('shipping_charges',($purchase && $purchase->shipping_charges) ? @num_format($purchase->shipping_charges) : @num_format(0.00),['class'=>'form-control input_number','placeholder'=> __('sale.shipping_charges')]);!!}
 				</div>
 			</div>
 		</div>
@@ -275,13 +275,13 @@
 		<div class="col-md-4">
 			<div class="form-group">
 	            {!! Form::label('shipping_status', __('lang_v1.shipping_status')) !!}
-	            {!! Form::select('shipping_status',$shipping_statuses, $purchase->shipping_status ?? null, ['class' => 'form-control','placeholder' => __('messages.please_select')]); !!}
+	            {!! Form::select('shipping_status',$shipping_statuses, ($purchase ? $purchase->shipping_status : null), ['class' => 'form-control','placeholder' => __('messages.please_select')]); !!}
 	        </div>
 		</div>
 		<div class="col-md-4">
 	        <div class="form-group">
 	            {!! Form::label('delivered_to', __('lang_v1.delivered_to') . ':' ) !!}
-	            {!! Form::text('delivered_to', $purchase->delivered_to ?? null, ['class' => 'form-control','placeholder' => __('lang_v1.delivered_to')]); !!}
+	            {!! Form::text('delivered_to', ($purchase ? $purchase->delivered_to : null), ['class' => 'form-control','placeholder' => __('lang_v1.delivered_to')]); !!}
 	        </div>
 	    </div>
 	    @php
@@ -408,34 +408,34 @@
 					<tbody>
 						<tr>
 							<td>
-								{!! Form::text('additional_expense_key_1', $purchase->additional_expense_key_1 ?? null, ['class' => 'form-control']); !!}
+								{!! Form::text('additional_expense_key_1', ($purchase ? $purchase->additional_expense_key_1 : null), ['class' => 'form-control']); !!}
 							</td>
 							<td>
-								{!! Form::text('additional_expense_value_1', $purchase->additional_expense_value_1 ? @num_format($purchase->additional_expense_value_1) : 0, ['class' => 'form-control input_number', 'id' => 'additional_expense_value_1']); !!}
-							</td>
-						</tr>
-						<tr>
-							<td>
-								{!! Form::text('additional_expense_key_2', $purchase->additional_expense_key_2 ?? null, ['class' => 'form-control']); !!}
-							</td>
-							<td>
-								{!! Form::text('additional_expense_value_2', $purchase->additional_expense_value_2 ? @num_format($purchase->additional_expense_value_2) : 0, ['class' => 'form-control input_number', 'id' => 'additional_expense_value_2']); !!}
+								{!! Form::text('additional_expense_value_1', ($purchase && $purchase->additional_expense_value_1) ? @num_format($purchase->additional_expense_value_1) : 0, ['class' => 'form-control input_number', 'id' => 'additional_expense_value_1']); !!}
 							</td>
 						</tr>
 						<tr>
 							<td>
-								{!! Form::text('additional_expense_key_3', $purchase->additional_expense_key_3 ?? null, ['class' => 'form-control']); !!}
+								{!! Form::text('additional_expense_key_2', ($purchase ? $purchase->additional_expense_key_2 : null), ['class' => 'form-control']); !!}
 							</td>
 							<td>
-								{!! Form::text('additional_expense_value_3', $purchase->additional_expense_value_3 ? @num_format($purchase->additional_expense_value_3) : 0, ['class' => 'form-control input_number', 'id' => 'additional_expense_value_3']); !!}
+								{!! Form::text('additional_expense_value_2', ($purchase && $purchase->additional_expense_value_2) ? @num_format($purchase->additional_expense_value_2) : 0, ['class' => 'form-control input_number', 'id' => 'additional_expense_value_2']); !!}
 							</td>
 						</tr>
 						<tr>
 							<td>
-								{!! Form::text('additional_expense_key_4', $purchase->additional_expense_key_4 ?? null, ['class' => 'form-control']); !!}
+								{!! Form::text('additional_expense_key_3', ($purchase ? $purchase->additional_expense_key_3 : null), ['class' => 'form-control']); !!}
 							</td>
 							<td>
-								{!! Form::text('additional_expense_value_4', $purchase->additional_expense_value_4 ? @num_format($purchase->additional_expense_value_4) : 0, ['class' => 'form-control input_number', 'id' => 'additional_expense_value_4']); !!}
+								{!! Form::text('additional_expense_value_3', ($purchase && $purchase->additional_expense_value_3) ? @num_format($purchase->additional_expense_value_3) : 0, ['class' => 'form-control input_number', 'id' => 'additional_expense_value_3']); !!}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								{!! Form::text('additional_expense_key_4', ($purchase ? $purchase->additional_expense_key_4 : null), ['class' => 'form-control']); !!}
+							</td>
+							<td>
+								{!! Form::text('additional_expense_value_4', ($purchase && $purchase->additional_expense_value_4) ? @num_format($purchase->additional_expense_value_4) : 0, ['class' => 'form-control input_number', 'id' => 'additional_expense_value_4']); !!}
 							</td>
 						</tr>
 					</tbody>
