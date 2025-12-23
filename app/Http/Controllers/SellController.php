@@ -1831,7 +1831,6 @@ class SellController extends Controller
             $output = [
                 'success' => 1,
                 'msg' => __('lang_v1.sell_converted_to_purchase_successfully'),
-                'redirect_url' => action([\App\Http\Controllers\PurchaseController::class, 'edit'], ['purchase' => $purchaseTransaction->id])
             ];
 
             // Return JSON for AJAX requests
@@ -1839,7 +1838,7 @@ class SellController extends Controller
                 return response()->json($output);
             }
 
-            return redirect()->action([\App\Http\Controllers\PurchaseController::class, 'edit'], ['purchase' => $purchaseTransaction->id])
+            return redirect()->back()
                 ->with('status', $output);
         } catch (\Exception $e) {
             \Log::emergency('File:'.$e->getFile().'Line:'.$e->getLine().'Message:'.$e->getMessage());

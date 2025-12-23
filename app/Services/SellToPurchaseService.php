@@ -74,9 +74,8 @@ class SellToPurchaseService
             $purchaseLocation = BusinessLocation::where('business_id', $businessId)
                 ->findOrFail($purchaseLocationId);
 
-            // Generate reference number for purchase
-            $refCount = $this->productUtil->setAndGetReferenceCount('purchase');
-            $refNo = $this->productUtil->generateReferenceNumber('purchase', $refCount);
+            // Use sell invoice_no as purchase reference
+            $refNo = $sellTransaction->invoice_no;
 
             // Create new Purchase transaction
             $purchaseTransactionData = [
@@ -123,7 +122,7 @@ class SellToPurchaseService
             // Create activity log
             $this->transactionUtil->activityLog($purchaseTransaction, 'converted_from_sell', null, [
                 'sell_id' => $sellId,
-                'sell_ref_no' => $sellTransaction->ref_no,
+                'sell_invoice_no' => $sellTransaction->invoice_no,
             ]);
 
             return $purchaseTransaction;
@@ -168,12 +167,11 @@ class SellToPurchaseService
 
         // Get lot number from sell line if available
         if (!empty($sellLine->lot_no_line_id)) {
-            $purchaseLineData['lot_number'] = $sellLine->lot_no_line_id;
-            
-            // Copy lot details if available
-            if (!empty($sellLine->lot_details)) {
-                $purchaseLineData['mfg_date'] = $sellLine->lot_details->mfg_date ?? null;
-                $purchaseLineData['exp_date'] = $sellLine->lot_details->exp_date ?? null;
+            $originalPurchaseLine = PurchaseLine::find($sellLine->lot_no_line_id);
+            if ($originalPurchaseLine) {
+                $purchaseLineData['lot_number'] = $originalPurchaseLine->lot_number;
+                $purchaseLineData['mfg_date'] = $originalPurchaseLine->mfg_date;
+                $purchaseLineData['exp_date'] = $originalPurchaseLine->exp_date;
             }
         }
 
