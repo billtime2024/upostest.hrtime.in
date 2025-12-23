@@ -108,6 +108,7 @@
 <script src="{{ asset('js/documents_and_note.js?v=' . $asset_v) }}"></script>
 <script src="{{asset('js/libs/html5-qr_code.js') }}"></script>
 <script src="{{ asset('js/camera-barcode-scanner.js') }}"></script>
+<script src="{{ asset('js/convert_to_purchase.js?v=' . $asset_v . '1') }}"></script>
 
 <!-- TODO -->
 @if (file_exists(public_path('AdminLTE/plugins/select2/lang/' . session()->get('user.language', config('app.locale')) . '.js')))

@@ -101,6 +101,7 @@ class Transaction extends Model
         'draft_created_at',
         'draft_updated_at',
         'draft_created_by',
+        'converted_from_sell_id',
         // Add other fillable fields as needed
     ];
 
@@ -221,6 +222,14 @@ class Transaction extends Model
     public function types_of_service()
     {
         return $this->belongsTo(\App\TypesOfService::class, 'types_of_service_id');
+    }
+
+    /**
+     * Get the original sell transaction that was converted to purchase
+     */
+    public function converted_from_sell()
+    {
+        return $this->belongsTo(\App\Transaction::class, 'converted_from_sell_id');
     }
 
     /**

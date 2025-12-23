@@ -1590,4 +1590,21 @@ return [
     'imei_numbers_help' => 'Enter IMEI numbers, one per line',
     'serial_numbers_help' => 'Enter serial numbers, one per line',
     'one_per_line' => 'One per line',
+
+    // Convert Sell to Purchase feature
+    'convert_sell_to_purchase' => 'Convert Sell to Purchase',
+    'supplier' => 'Supplier',
+    'please_select' => 'Please select',
+    'sell_details' => 'Sell Details',
+    'unit_price' => 'Unit Price',
+    'line_total' => 'Line Total',
+    'total' => 'Total',
+    'note' => 'Note',
+    'sell_will_be_converted_to_purchase' => 'The sell will be converted to a purchase transaction.',
+    'purchase_status_will_be_pending' => 'Purchase status will be set to pending.',
+    'shipping_charges_will_be_copied' => 'Shipping charges will be copied from the sell.',
+    'imei_serial_numbers_will_be_transferred' => 'IMEI/Serial numbers will be transferred to the purchase.',
+    'convert_to_purchase' => 'Convert to Purchase',
+    'sell_already_converted_to_purchase' => 'Sell already converted to purchase',
+    'sell_converted_to_purchase_successfully' => 'Sell converted to purchase successfully',
 ];

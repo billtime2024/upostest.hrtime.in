@@ -273,6 +273,12 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::get('/sells/pos/get-available-imei-serial-numbers', [SellPosController::class, 'getAvailableImeiSerialNumbers']);
     Route::get('/reset-mapping', [SellController::class, 'resetMapping']);
 
+    // Sell to Purchase conversion routes
+    Route::get('sell/{id}/convert-to-purchase', [SellController::class, 'showConvertToPurchaseModal'])
+        ->name('sell.convert-to-purchase');
+    Route::post('sell/{id}/convert-to-purchase', [SellController::class, 'convertToPurchase'])
+        ->name('sell.convert-to-purchase.store');
+
 Route::get('/sell-pos/get-stock-details/{variation_id}', [\App\Http\Controllers\SellPosController::class, 'getStockDetails']);
     Route::get('/sell-pos/get-available-imei-serial-numbers', [\App\Http\Controllers\SellPosController::class, 'getAvailableImeiSerialNumbers']);
     Route::get('/sell/get-available-imei-serial-numbers', [\App\Http\Controllers\SellController::class, 'getAvailableImeiSerialNumbers']);

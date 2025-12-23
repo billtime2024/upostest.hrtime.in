@@ -415,6 +415,11 @@
     @can('print_invoice')
       <a href="#" class="print-invoice tw-dw-btn tw-dw-btn-primary tw-text-white" data-href="{{route('sell.printInvoice', [$sell->id])}}"><i class="fa fa-print" aria-hidden="true"></i> @lang("lang_v1.print_invoice")</a>
     @endcan
+    @can('purchase.create')
+      @if($sell->type == 'sell' && empty($sell->converted_from_sell_id))
+        <a href="#" class="tw-dw-btn tw-dw-btn-warning tw-text-white convert-to-purchase-btn" data-href="{{action([\App\Http\Controllers\SellController::class, 'showConvertToPurchaseModal'], [$sell->id])}}" data-container=".view_modal"><i class="fas fa-exchange-alt"></i> @lang("lang_v1.convert_to_purchase")</a>
+      @endif
+    @endcan
       <button type="button" class="tw-dw-btn tw-dw-btn-neutral tw-text-white no-print" data-dismiss="modal">@lang( 'messages.close' )</button>
     </div>
   </div>

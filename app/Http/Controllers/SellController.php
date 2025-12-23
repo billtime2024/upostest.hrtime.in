@@ -452,6 +452,11 @@ class SellController extends Controller
                                     $html .= '<li><a href="'.action([\App\Http\Controllers\SellReturnController::class, 'add'], [$row->id]).'"><i class="fas fa-undo"></i> '.__('lang_v1.sell_return').'</a></li>
 
                                     <li><a href="'.action([\App\Http\Controllers\SellPosController::class, 'showInvoiceUrl'], [$row->id]).'" class="view_invoice_url"><i class="fas fa-eye"></i> '.__('lang_v1.view_invoice_url').'</a></li>';
+
+                                    // Add Convert to Purchase button for sell transactions only
+                                    if ($row->type == 'sell' && empty($row->converted_from_sell_id)) {
+                                        $html .= '<li><a href="#" class="convert-to-purchase-btn" data-href="'.action([\App\Http\Controllers\SellController::class, 'showConvertToPurchaseModal'], [$row->id]).'" data-container=".view_modal"><i class="fas fa-exchange-alt"></i> '.__('lang_v1.convert_to_purchase').'</a></li>';
+                                    }
                                 }
                             }
 
@@ -1753,5 +1758,103 @@ class SellController extends Controller
 
         echo 'Mapping reset success';
         exit;
+    }
+
+    /**
+     * Show the modal to convert sell to purchase
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showConvertToPurchaseModal($id)
+    {
+        // Check permission: purchase.create
+        if (! auth()->user()->can('purchase.create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $business_id = request()->session()->get('user.business_id');
+
+        // Fetch sell transaction with sell_lines, products, variations
+        $sell = Transaction::where('business_id', $business_id)
+            ->where('type', 'sell')
+            ->with(['sell_lines' => function ($query) {
+                $query->whereNull('parent_sell_line_id');
+            }, 'sell_lines.product', 'sell_lines.variations', 'sell_lines.product.unit', 'contact'])
+            ->findOrFail($id);
+
+        // Check if already converted
+        if (!empty($sell->converted_from_sell_id)) {
+            return redirect()->back()->with('status', [
+                'success' => 0,
+                'msg' => __('lang_v1.sell_already_converted_to_purchase'),
+            ]);
+        }
+
+        // Get suppliers (contacts where type = 'supplier')
+        $suppliers = Contact::suppliersDropdown($business_id, false);
+
+        // Get business locations
+        $business_locations = BusinessLocation::forDropdown($business_id, false);
+
+        return view('sell.convert_to_purchase_modal')
+            ->with(compact('sell', 'suppliers', 'business_locations'));
+    }
+
+    /**
+     * Convert sell to purchase
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function convertToPurchase(Request $request, $id)
+    {
+        // Check permission: purchase.create
+        if (! auth()->user()->can('purchase.create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        try {
+            $request->validate([
+                'supplier_id' => 'required|exists:contacts,id',
+                'location_id' => 'required|exists:business_locations,id',
+            ]);
+
+            $supplierId = $request->input('supplier_id');
+            $purchaseLocationId = $request->input('location_id');
+
+            // Use the service to convert
+            $sellToPurchaseService = new \App\Services\SellToPurchaseService($this->productUtil, $this->transactionUtil);
+            $purchaseTransaction = $sellToPurchaseService->convertSellToPurchase($id, $supplierId, $purchaseLocationId);
+
+            $output = [
+                'success' => 1,
+                'msg' => __('lang_v1.sell_converted_to_purchase_successfully'),
+                'redirect_url' => action([\App\Http\Controllers\PurchaseController::class, 'edit'], ['purchase' => $purchaseTransaction->id])
+            ];
+
+            // Return JSON for AJAX requests
+            if ($request->ajax()) {
+                return response()->json($output);
+            }
+
+            return redirect()->action([\App\Http\Controllers\PurchaseController::class, 'edit'], ['purchase' => $purchaseTransaction->id])
+                ->with('status', $output);
+        } catch (\Exception $e) {
+            \Log::emergency('File:'.$e->getFile().'Line:'.$e->getLine().'Message:'.$e->getMessage());
+
+            $output = [
+                'success' => 0,
+                'msg' => $e->getMessage(),
+            ];
+
+            // Return JSON for AJAX requests
+            if ($request->ajax()) {
+                return response()->json($output);
+            }
+
+            return redirect()->back()->with('status', $output)->withInput();
+        }
     }
 }
