@@ -360,7 +360,7 @@ if(gettype($receipt_details->discount) == "string") {
 										style="float: left; margin-right: 8px;">
 									@endif
 									{{$line['name']}} {{$line['product_variation']}} {{$line['variation']}}
-									@if($line['item_type'] == 'imei' || $line['item_type'] == 'serial')
+									@if(isset($line['item_type']) && ($line['item_type'] == 'imei' || $line['item_type'] == 'serial'))
 									<br>{{ $line['item_type'] == 'imei' ? implode(', ', $line['sold_imei'] ?? []) : implode(', ', $line['sold_serial'] ?? []) }}
 									@endif
 									@if(!empty($line['sub_sku'])), {{$line['sub_sku']}} @endif
